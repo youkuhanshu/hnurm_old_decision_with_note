@@ -56,7 +56,7 @@
 - 先执行第一个
    - 返回success：再执行第二个
    - 执行每个子节点前，重新检查前面所有已执行节点的状态
-   - ==若任何前面的节点状态变为 FAILURE，则整个 ReactiveSequence 立即返回 FAILURE，后续节点不执行==
+   - ==若任何前面的节点状态变为 FAILURE，则整个 ReactiveSequence 立即返回 FAILURE，后续节点不执行，下一次tick再从头开始刷一遍
    - 所有节点都success，返回success
 #### 3.3 pipelineSequence
 - ==子节点按顺序启动，但前面的节点可以持续运行并更新数据==

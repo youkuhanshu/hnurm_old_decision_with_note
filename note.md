@@ -156,7 +156,12 @@
         - **这确保了回调函数只在行为树节点的tick()周期内执行，与行为树的执行节奏同步**
 3. sub_option
     - **用于精细化配置订阅者行为的机制**
-    - `sub_option.callback_group = callback_group_;`这行代码将is_game_start_callback回调函数明确分配到之前创建的互斥回调组中，确保它遵循互斥执行的规则。
+    - `sub_option.callback_group = callback_group_;`
+    - referee_sub_ = node_->create_subscription<...>(
+    topic, qos,
+    std::bind(&GameStart::is_game_start_callback, this, _1),
+    sub_option);  // 传入配置好的 sub_option
+    - 这行代码将is_game_start_callback回调函数明确分配到之前创建的互斥回调组中，确保它遵循互斥执行的规则。
 4. **==设计理念==**
     - 原先如果这些订阅者订阅的话题出现了新的消息，回调函数原本是会立即执行去更新状态的，现在是需要等到行为树tick到的时候一起执行
     - 每次tick的时候，先把该执行的回调先执行，去更新状态再判断是不是游戏开始
